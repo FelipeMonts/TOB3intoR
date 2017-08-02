@@ -56,7 +56,8 @@ TimeStart<-Sys.time()  ;
 #  Set Working directory
 
 
-setwd("C:/Felipe/PIHM-CYCLES/PIHM/PIHM_Felipe/CNS/WE-38/WE38_Files_PIHM_Cycles20170208/SWATPIHMRcode") ; 
+setwd("C:\\Felipe\\Eddy Covariance System\\RCode") ; 
+
 
 
 ###############################################################################################################
@@ -119,4 +120,46 @@ setwd("C:/Felipe/PIHM-CYCLES/PIHM/PIHM_Felipe/CNS/WE-38/WE38_Files_PIHM_Cycles20
 #                        Using TOB32.exe from R
 ###############################################################################################################
 
+# TOB32.exe
 
+# C:\Program Files (x86)\Campbellsci\LoggerNet>.\tob32 -H
+# .\tob32 -H
+# v12.00
+# Switches:
+#   H|Help gives this message
+# ?|?    gives this message
+# d|DaDisp Sets output file format to DaDisp
+# a|ASCII  (TOA5)  Output CSI Table Oriented ASCII version 5 format
+# b|binary (TOB1) Output CSI Table Oriented Binary version 1 format
+# e|EASE   Output EASE format(not implemented)
+# f|check discontinuities, and fill missing floating data with NaN
+# with scan_sec &scan_nano inputs
+# i|ID2000  Output ID2000 format
+# n|notime do not output timestamps on TOA5 output
+# m ?| blank: create one output file per file marker,
+# 0: don't care,        1: per file mark,
+# 2: per removal mark,  3: per either mark
+# 
+# o|create output on specified path
+# r|output record number
+# s|check discontinuities, and start new files for them
+# with scan_sec &scan_nano inputs
+# v|verbose output to CSIDebug.log
+# 
+# examples:
+# tob32 -d mydata.dat --converts to DaDisp format
+# tob32 -a mydata.dat --converts to TOA5 format
+# tob32 -b mydata.dat --converts to TOB1 format
+# tob32 -f 0;0 -b mydata.dat --TOB1 format with discontinuities check
+# tob32 -i mydata.dat --converts to ID2000 format
+# tob32 -a -o d:\outpath\  mydata.dat --converts "mydata.dat",
+# to TOA5 format, in directory \outputpath\
+
+system(paste(getwd(),"tob32 -a",sep="/"))
+
+system(shQuote("C:\\Felipe\\Eddy Covariance System\\RCode\\TOB3intoR>tob32.exe -a 6358.Flux.dat",type="cmd"))
+
+
+system2("tob32.exe", args=c("-a", "6358.Flux.dat"))
+
+shell("tob32 -a 6358.Flux.dat",NULL)
