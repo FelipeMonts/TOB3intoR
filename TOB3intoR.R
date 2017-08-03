@@ -156,3 +156,6 @@ setwd("C:\\Felipe\\Eddy Covariance System\\RCode\\TOB3intoR") ;
 # to TOA5 format, in directory \outputpath\
 
 shell("tob32.exe -a -o ./6358.Flux.TOA5 6358.Flux.dat", intern=T)
+
+system("tob32.exe -a -o ./6358.Flux.TOA5 6358.Flux.dat")
+
