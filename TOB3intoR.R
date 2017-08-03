@@ -155,7 +155,23 @@ setwd("C:\\Felipe\\Eddy Covariance System\\RCode\\TOB3intoR") ;
 # tob32 -a -o d:\outpath\  mydata.dat --converts "mydata.dat",
 # to TOA5 format, in directory \outputpath\
 
+
+###############Program####################
+
+# Path C:\Felipe\Willow Project\Willow Experiments\Willow Rockview\EddyCovarianceData_Felipe\
+# 2017\Willow\WillowOpenPathEddyCovarianceData\EC_W_OP_20170519
+
+Directories<-list.dirs("C:\\Felipe\\Willow Project\\Willow Experiments\\Willow Rockview\\EddyCovarianceData_Felipe\\2017\\Willow\\WillowOpenPathEddyCovarianceData", recursive=T)
+
+Directories[2]
+list.files(Directories[2])
+
+
+
 shell("tob32.exe -a -o ./6358.Flux.TOA5 6358.Flux.dat", intern=T)
 
 system("tob32.exe -a -o ./6358.Flux.TOA5 6358.Flux.dat")
+
+
+
 
