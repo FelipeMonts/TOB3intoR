@@ -56,7 +56,7 @@ TimeStart<-Sys.time()  ;
 #  Set Working directory
 
 
-setwd("C:\\Felipe\\Eddy Covariance System\\RCode") ; 
+setwd("C:\\Felipe\\Eddy Covariance System\\RCode\\TOB3intoR") ; 
 
 
 
@@ -155,11 +155,4 @@ setwd("C:\\Felipe\\Eddy Covariance System\\RCode") ;
 # tob32 -a -o d:\outpath\  mydata.dat --converts "mydata.dat",
 # to TOA5 format, in directory \outputpath\
 
-system(paste(getwd(),"tob32 -a",sep="/"))
-
-system(shQuote("C:\\Felipe\\Eddy Covariance System\\RCode\\TOB3intoR>tob32.exe -a 6358.Flux.dat",type="cmd"))
-
-
-system2("tob32.exe", args=c("-a", "6358.Flux.dat"))
-
-shell("tob32 -a 6358.Flux.dat",NULL)
+shell("tob32.exe -a -o ./6358.Flux.TOA5 6358.Flux.dat", intern=T)
