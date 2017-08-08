@@ -191,7 +191,7 @@ TOA5.file<-paste(unlist(strsplit(TOB3.file,split="[.]"))[1],unlist(strsplit(TOB3
 # 
 
 
-TOB3toTOA5inst<-shQuote(paste0('tob32.exe -a -o ./6358.Flux.TOA5 ', dQuote(paste(TOB3.Directories[2],TOB3.file, sep="\\"))),type="cmd2")
+TOB3toTOA5inst<-paste0('tob32.exe -a -o ./6358.Flux.TOA5 ', paste(TOB3.Directories[2],TOB3.file, sep="\\"))
 
 ######  Pass the file information to Tob32.exe   ############
 
@@ -200,9 +200,7 @@ system(TOB3toTOA5inst)
 
 
 
-shell("tob32.exe -a -o ./6358.Flux.TOA5 6358.Flux.dat", intern=T)
 
-system("tob32.exe -a -o ./6358.Flux.TOA5 6358.Flux.dat")
 
 
 
