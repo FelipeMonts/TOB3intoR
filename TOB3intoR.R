@@ -156,15 +156,47 @@ setwd("C:\\Felipe\\Eddy Covariance System\\RCode\\TOB3intoR") ;
 # to TOA5 format, in directory \outputpath\
 
 
-###############Program####################
+###############################################################################################################
+#                        Program
+###############################################################################################################
+
+
 
 # Path C:\Felipe\Willow Project\Willow Experiments\Willow Rockview\EddyCovarianceData_Felipe\
 # 2017\Willow\WillowOpenPathEddyCovarianceData\EC_W_OP_20170519
 
-Directories<-list.dirs("C:\\Felipe\\Willow Project\\Willow Experiments\\Willow Rockview\\EddyCovarianceData_Felipe\\2017\\Willow\\WillowOpenPathEddyCovarianceData", recursive=T)
 
-Directories[2]
-list.files(Directories[2])
+#######  get a list of the directories that have the files with the data
+
+
+
+TOB3.Directories<-list.dirs("C:\\Felipe\\Willow_Project\\Willow_Experiments\\Willow_Rockview\\EddyCovarianceData_Felipe\\2017\\Willow\\WillowOpenPathEddyCovarianceData", recursive=T) ;
+
+#######  From each directory get the file list and get the flux file 
+
+TOB3.file<-list.files(TOB3.Directories[2])[grep("flux", list.files(TOB3.Directories[2]), value=F)] ;
+
+######  create the name of the output file after convesion to TOA5
+
+
+TOA5.file<-paste(unlist(strsplit(TOB3.file,split="[.]"))[1],unlist(strsplit(TOB3.file,split="[.]"))[2],"TOA5",sep=".") ;
+
+
+# tob32.exe
+# -a -o
+# ./6358.Flux.TOA5
+# paste(TOB3.Directories[2],TOB3.file, sep="\\")
+# "C:\\Felipe\\Willow Project\\Willow Experiments\\Willow Rockview\\EddyCovarianceData_Felipe\\2017\\Willow\
+# \WillowOpenPathEddyCovarianceData/EC_W_OP_20170519\\6463.flux.dat\
+# 
+
+
+TOB3toTOA5inst<-shQuote(paste0('tob32.exe -a -o ./6358.Flux.TOA5 ', dQuote(paste(TOB3.Directories[2],TOB3.file, sep="\\"))),type="cmd2")
+
+######  Pass the file information to Tob32.exe   ############
+
+
+system(TOB3toTOA5inst)
 
 
 
