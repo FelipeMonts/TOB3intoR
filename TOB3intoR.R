@@ -170,35 +170,88 @@ setwd("C:\\Felipe\\Eddy Covariance System\\RCode\\TOB3intoR") ;
 
 
 
-TOB3.Directories<-list.dirs("C:\\Felipe\\Willow_Project\\Willow_Experiments\\Willow_Rockview\\EddyCovarianceData_Felipe\\2017\\Willow\\WillowOpenPathEddyCovarianceData", recursive=T) ;
+TOB3.Directories<-list.dirs("C:\\Felipe\\Willow_Project\\Willow_Experiments\\Willow_Rockview\\EddyCovarianceData_Felipe\\2017\\Corn\\CornClosedPathEddyCovarianceData", recursive=T) ;
+
+#  C:\Felipe\Willow_Project\Willow_Experiments\Willow_Rockview\EddyCovarianceData_Felipe\2017\Corn\CornClosedPathEddyCovarianceData
+
+#  C:\Felipe\Willow_Project\Willow_Experiments\Willow_Rockview\EddyCovarianceData_Felipe\2017\Corn\CornOpenPathEddyCovarianceData
+
+#  C:\\Felipe\\Willow_Project\\Willow_Experiments\\Willow_Rockview\\EddyCovarianceData_Felipe\\2017\\Willow\\WillowOpenPathEddyCovarianceData
 
 #######  From each directory get the file list and get the flux file 
 
-TOB3.file<-list.files(TOB3.Directories[2])[grep("flux", list.files(TOB3.Directories[2]), value=F)] ;
+TOB3.file<-list.files(TOB3.Directories[7])[grep("lux", list.files(TOB3.Directories[2]), value=F)] ;
 
 ######  create the name of the output file after convesion to TOA5
 
 
-TOA5.file<-paste(unlist(strsplit(TOB3.file,split="[.]"))[1],unlist(strsplit(TOB3.file,split="[.]"))[2],"TOA5",sep=".") ;
+#  Create directory name for the output 
+
+Dir.name<-paste0("./",strsplit(TOB3.Directories[7],split="/")[[1]][2]) ;
+
+
+#TOA5.file<-paste(Dir.name,unlist(strsplit(TOB3.file,split="[.]"))[2],"TOA5",sep="_") ;
+
+
+dir.create(Dir.name)
 
 
 # tob32.exe
 # -a -o
-# ./6358.Flux.TOA5
+# ./6358.Fluxxx.TOA5
 # paste(TOB3.Directories[2],TOB3.file, sep="\\")
 # "C:\\Felipe\\Willow Project\\Willow Experiments\\Willow Rockview\\EddyCovarianceData_Felipe\\2017\\Willow\
 # \WillowOpenPathEddyCovarianceData/EC_W_OP_20170519\\6463.flux.dat\
 # 
 
 
-TOB3toTOA5inst<-paste0('tob32.exe -a -o ./6358.Flux.TOA5 ', paste(TOB3.Directories[2],TOB3.file, sep="\\"))
+TOB3toTOA5inst<-paste0('tob32.exe -a -o ',Dir.name,"/ ", paste(TOB3.Directories[7],TOB3.file, sep="\\"))
 
 ######  Pass the file information to Tob32.exe   ############
 
 
 system(TOB3toTOA5inst)
 
+system("tob32.exe --?")
 
+
+####### Add plots of the data to diagnose possible data errors based on the Rcode InspectFlux_OpenPath
+
+
+read.table(paste(TOB3.Directories[7],TOB3.file, sep="\\"))
+
+assign('Flux.names', read.csv(File.paths[1],skip=1,header=F,nrows=1,as.is=T));
+
+assign('Flux.units', read.csv(File.paths[1],skip=2,header=F,nrows=1,as.is=T));      
+
+assign('Flux.units2', read.csv(File.paths[1],skip=3,header=F,nrows=1,as.is=T));
+
+#Read the Flux Files to compare
+
+for (i in 1:length(File.paths)) {
+  
+  assign(paste('Flux.data', i,sep="_"),read.csv(File.paths[i],skip=4,header=F,as.is=T,col.names=Flux.names))
+}
+
+# Plot the differnt fluxes
+
+
+Npoints_1<-seq((dim(Flux.data_1)[1]-1100),dim(Flux.data_1)[1]) ;
+
+Npoints_2<-seq((dim(Flux.data_2)[1]-1100),dim(Flux.data_2)[1]) ;
+#Npoints<-seq(1:200);
+
+plot(as.POSIXct(Flux.data_1$TIMESTAMP[Npoints_1]),Flux.data_1$CO2_wpl_LE[Npoints_1],type="l",col="GREEN", ylim=c(-0.5,0.5));
+points(as.POSIXct(Flux.data_1$TIMESTAMP[Npoints_1]),Flux.data_1$CO2_wpl_H[Npoints_1],type="l",col="BLUE" );
+points(as.POSIXct(Flux.data_1$TIMESTAMP[Npoints_1]),Flux.data_1$CO2_wpl_H[Npoints_1]+Flux.data_1$CO2_wpl_LE[Npoints_1],type="l",col="RED"  );
+
+plot(as.POSIXct(Flux.data_2$TIMESTAMP[Npoints_2]),Flux.data_2$CO2_wpl_LE[Npoints_2],type="l",col="GREEN", ylim=c(-0.5,0.5));
+points(as.POSIXct(Flux.data_2$TIMESTAMP[Npoints_2]),Flux.data_2$CO2_wpl_H[Npoints_2],type="l",col="BLUE" );
+points(as.POSIXct(Flux.data_2$TIMESTAMP[Npoints_2]),Flux.data_2$CO2_wpl_H[Npoints_2]+Flux.data_2$CO2_wpl_LE[Npoints_2],type="l",col="RED"  );
+
+plot(as.POSIXct(Flux.data_3$TIMESTAMP[Npoints]),Flux.data_3$CO2_wpl_LE[Npoints],type="l",col="GREEN", ylim=c(-0.5,0.5));
+points(as.POSIXct(Flux.data_3$TIMESTAMP[Npoints]),Flux.data_3$CO2_wpl_H[Npoints],type="l",col="BLUE" );
+points(as.POSIXct(Flux.data_3$TIMESTAMP[Npoints]),Flux.data_3$CO2_wpl_H[Npoints]+Flux.data_3$CO2_wpl_LE[Npoints],type="l",col="RED"  );
 
 
 
