@@ -56,7 +56,7 @@ TimeStart<-Sys.time()  ;
 #  Set Working directory
 
 
-setwd("C:\\Felipe\\Eddy Covariance System\\RCode\\TOB3intoR") ; 
+setwd("C:\\Felipe\\Willow_Project\\Willow_Experiments\\Willow_Rockview\\EddyCovarianceData_Felipe\\RCode\\TOB3intoR") ; 
 
 
 
@@ -180,7 +180,7 @@ TOB3.Directories<-list.dirs("C:\\Felipe\\Willow_Project\\Willow_Experiments\\Wil
 
 #######  From each directory get the file list and get the flux file 
 
-TOB3.file<-list.files(TOB3.Directories[7])[grep("lux", list.files(TOB3.Directories[2]), value=F)] ;
+TOB3.file<-list.files(TOB3.Directories[7])[grep("lux", list.files(TOB3.Directories[7]), value=F)] ;
 
 ######  create the name of the output file after convesion to TOA5
 
@@ -210,30 +210,45 @@ TOB3toTOA5inst<-paste0('tob32.exe -a -o ',Dir.name,"/ ", paste(TOB3.Directories[
 ######  Pass the file information to Tob32.exe   ############
 
 
-system(TOB3toTOA5inst)
+system(TOB3toTOA5inst) ;
 
-system("tob32.exe --?")
+system("tob32.exe --?");
 
 
 ####### Add plots of the data to diagnose possible data errors based on the Rcode InspectFlux_OpenPath
 
 
-read.table(paste(TOB3.Directories[7],TOB3.file, sep="\\"))
 
-assign('Flux.names', read.csv(File.paths[1],skip=1,header=F,nrows=1,as.is=T));
+#######Get the name of the table that is going to  be ploted
 
-assign('Flux.units', read.csv(File.paths[1],skip=2,header=F,nrows=1,as.is=T));      
+Name.parts<-strsplit(TOB3.file,'[.]')  ;
 
-assign('Flux.units2', read.csv(File.paths[1],skip=3,header=F,nrows=1,as.is=T));
+
+assign('Flux.names', read.csv( paste0(Dir.name,"/",Name.parts[[1]][1],".",Name.parts[[1]][2], ".TOA") , skip=1,header=F,nrows=1,as.is=T));
+
+assign('Flux.units', read.csv( paste0(Dir.name,"/",Name.parts[[1]][1],".",Name.parts[[1]][2], ".TOA") , skip=2,header=F,nrows=1,as.is=T)); 
+
+assign('Flux.units2', read.csv(paste0(Dir.name,"/",Name.parts[[1]][1],".",Name.parts[[1]][2], ".TOA") , skip=3,header=F,nrows=1,as.is=T));
+
+Flux.data<-read.csv( paste0(Dir.name,"/",Name.parts[[1]][1],".",Name.parts[[1]][2], ".TOA"), skip=6,header=F,as.is=T,col.names=Flux.names)
+
+
+
+
+
+assign('Flux.names', read.csv(paste(TOB3.Directories[7],TOB3.file, sep="\\"),skip=1,header=F,nrows=1,as.is=T));
+
+assign('Flux.units', read.csv(paste(TOB3.Directories[7],TOB3.file, sep="\\"),skip=2,header=F,nrows=1,as.is=T));      
+
+assign('Flux.units2', read.csv(paste(TOB3.Directories[7],TOB3.file, sep="\\"),skip=3,header=F,nrows=1,as.is=T));
 
 #Read the Flux Files to compare
 
-for (i in 1:length(File.paths)) {
-  
-  assign(paste('Flux.data', i,sep="_"),read.csv(File.paths[i],skip=4,header=F,as.is=T,col.names=Flux.names))
-}
 
-# Plot the differnt fluxes
+Flux.data<-read.csv(paste(TOB3.Directories[7],TOB3.file, sep="\\"), skip=6,header=F,as.is=T,col.names=Flux.names)
+
+
+# Plot the different fluxes
 
 
 Npoints_1<-seq((dim(Flux.data_1)[1]-1100),dim(Flux.data_1)[1]) ;
