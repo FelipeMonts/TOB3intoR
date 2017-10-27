@@ -168,9 +168,12 @@ setwd("C:\\Felipe\\Willow_Project\\Willow_Experiments\\Willow_Rockview\\EddyCova
 
 #######  get a list of the directories that have the files with the data
 
+#TOB3.Directories<-list.dirs("D:", recursive=T) ;
 
 
-TOB3.Directories<-list.dirs("C:\\Felipe\\Willow_Project\\Willow_Experiments\\Willow_Rockview\\EddyCovarianceData_Felipe\\2017\\Corn\\CornClosedPathEddyCovarianceData", recursive=T) ;
+#TOB3.Directories<-list.dirs("C:\\Felipe\\Willow_Project\\Willow_Experiments\\Willow_Rockview\\EddyCovarianceData_Felipe\\2017\\Corn\\CornClosedPathEddyCovarianceData", recursive=T) ;
+
+TOB3.Directories<-list.dirs("C:\\Felipe\\Willow_Project\\Willow_Experiments\\Willow_Rockview\\EddyCovarianceData_Felipe\\2017\\Willow\\WillowOpenPathEddyCovarianceData", recursive=T) ;
 
 #  C:\Felipe\Willow_Project\Willow_Experiments\Willow_Rockview\EddyCovarianceData_Felipe\2017\Corn\CornClosedPathEddyCovarianceData
 
@@ -178,16 +181,19 @@ TOB3.Directories<-list.dirs("C:\\Felipe\\Willow_Project\\Willow_Experiments\\Wil
 
 #  C:\\Felipe\\Willow_Project\\Willow_Experiments\\Willow_Rockview\\EddyCovarianceData_Felipe\\2017\\Willow\\WillowOpenPathEddyCovarianceData
 
+FileNo<-5  ;
+
+
 #######  From each directory get the file list and get the flux file 
 
-TOB3.file<-list.files(TOB3.Directories[7])[grep("lux", list.files(TOB3.Directories[7]), value=F)] ;
+TOB3.file<-list.files(TOB3.Directories[FileNo])[grep("lux", list.files(TOB3.Directories[FileNo]), value=F)] ;
 
 ######  create the name of the output file after convesion to TOA5
 
 
 #  Create directory name for the output 
 
-Dir.name<-paste0("./",strsplit(TOB3.Directories[7],split="/")[[1]][2]) ;
+Dir.name<-paste0("./",strsplit(TOB3.Directories[FileNo],split="/")[[1]][2]) ;
 
 
 #TOA5.file<-paste(Dir.name,unlist(strsplit(TOB3.file,split="[.]"))[2],"TOA5",sep="_") ;
@@ -205,7 +211,9 @@ dir.create(Dir.name)
 # 
 
 
-TOB3toTOA5inst<-paste0('tob32.exe -a -o ',Dir.name,"/ ", paste(TOB3.Directories[7],TOB3.file, sep="\\"))
+#TOB3toTOA5inst<-paste0('tob32.exe -a -o ',Dir.name,"/ ", 'C:/Felipe/Willow_Project/Willow_Experiments/Willow_Rockview/EddyCovarianceData_Felipe/RCode/TOB3intoR/EC_W_OP_20170915/6464BOX.flux.dat')  ;
+
+TOB3toTOA5inst<-paste0('tob32.exe -a -o ',Dir.name,"/ ", paste(TOB3.Directories[FileNo],TOB3.file[1], sep="\\")) ;
 
 ######  Pass the file information to Tob32.exe   ############
 
@@ -230,31 +238,38 @@ assign('Flux.units', read.csv( paste0(Dir.name,"/",Name.parts[[1]][1],".",Name.p
 
 assign('Flux.units2', read.csv(paste0(Dir.name,"/",Name.parts[[1]][1],".",Name.parts[[1]][2], ".TOA") , skip=3,header=F,nrows=1,as.is=T));
 
+
+#Flux.data<-read.csv( './NA/6463.flux.TOA', skip=6,header=F,as.is=T,col.names=Flux.names)  ;
+
 Flux.data<-read.csv( paste0(Dir.name,"/",Name.parts[[1]][1],".",Name.parts[[1]][2], ".TOA"), skip=6,header=F,as.is=T,col.names=Flux.names)
 
 
 
 
-
-assign('Flux.names', read.csv(paste(TOB3.Directories[7],TOB3.file, sep="\\"),skip=1,header=F,nrows=1,as.is=T));
-
-assign('Flux.units', read.csv(paste(TOB3.Directories[7],TOB3.file, sep="\\"),skip=2,header=F,nrows=1,as.is=T));      
-
-assign('Flux.units2', read.csv(paste(TOB3.Directories[7],TOB3.file, sep="\\"),skip=3,header=F,nrows=1,as.is=T));
-
-#Read the Flux Files to compare
-
-
-Flux.data<-read.csv(paste(TOB3.Directories[7],TOB3.file, sep="\\"), skip=6,header=F,as.is=T,col.names=Flux.names)
-
-
 # Plot the different fluxes
 
+str(Flux.data)
 
-Npoints_1<-seq((dim(Flux.data_1)[1]-1100),dim(Flux.data_1)[1]) ;
+dim(Flux.data)
 
-Npoints_2<-seq((dim(Flux.data_2)[1]-1100),dim(Flux.data_2)[1]) ;
+
+
+Npoints<-seq((dim(Flux.data)[1]-1000),dim(Flux.data)[1]) ;
+
+Npoints_1<-seq((dim(Flux.data_1)[1]-100),dim(Flux.data_1)[1]) ;
+
+Npoints_2<-seq((dim(Flux.data_2)[1]-100),dim(Flux.data_2)[1]) ;
 #Npoints<-seq(1:200);
+
+
+plot(as.POSIXct(Flux.data$TIMESTAMP[Npoints]),Flux.data$shf_Avg.1[Npoints],type="l",col="GREEN" )# , ylim=c(-100,100));
+points(as.POSIXct(Flux.data$TIMESTAMP[Npoints]),Flux.data$shf_Avg.2[Npoints],type="l",col="BLUE" );
+points(as.POSIXct(Flux.data$TIMESTAMP[Npoints]),Flux.data$shf_Avg.3[Npoints],type="l",col="RED"  );
+points(as.POSIXct(Flux.data$TIMESTAMP[Npoints]),Flux.data$shf_Avg.4[Npoints],type="l",col="CYAN");
+
+
+
+
 
 plot(as.POSIXct(Flux.data_1$TIMESTAMP[Npoints_1]),Flux.data_1$CO2_wpl_LE[Npoints_1],type="l",col="GREEN", ylim=c(-0.5,0.5));
 points(as.POSIXct(Flux.data_1$TIMESTAMP[Npoints_1]),Flux.data_1$CO2_wpl_H[Npoints_1],type="l",col="BLUE" );
