@@ -173,7 +173,9 @@ setwd("C:\\Felipe\\Willow_Project\\Willow_Experiments\\Willow_Rockview\\EddyCova
 
 #TOB3.Directories<-list.dirs("C:\\Felipe\\Willow_Project\\Willow_Experiments\\Willow_Rockview\\EddyCovarianceData_Felipe\\2017\\Corn\\CornClosedPathEddyCovarianceData", recursive=T) ;
 
-TOB3.Directories<-list.dirs("C:\\Felipe\\Willow_Project\\Willow_Experiments\\Willow_Rockview\\EddyCovarianceData_Felipe\\2017\\Willow\\WillowOpenPathEddyCovarianceData", recursive=T) ;
+TOB3.Directories<-list.dirs("C:\\Felipe\\Willow_Project\\Willow_Experiments\\Willow_Rockview\\EddyCovarianceData_Felipe\\2019\\Willow\\WillowOpenPathEddyCovarianceData", recursive=T) ;
+
+# C:\Felipe\Willow_Project\Willow_Experiments\Willow_Rockview\EddyCovarianceData_Felipe\2019\Willow\WillowOpenPathEddyCovarianceData\EC_OP_W_20190515
 
 #  C:\Felipe\Willow_Project\Willow_Experiments\Willow_Rockview\EddyCovarianceData_Felipe\2017\Corn\CornClosedPathEddyCovarianceData
 
@@ -181,7 +183,7 @@ TOB3.Directories<-list.dirs("C:\\Felipe\\Willow_Project\\Willow_Experiments\\Wil
 
 #  C:\\Felipe\\Willow_Project\\Willow_Experiments\\Willow_Rockview\\EddyCovarianceData_Felipe\\2017\\Willow\\WillowOpenPathEddyCovarianceData
 
-FileNo<-5  ;
+FileNo<-2  ;
 
 
 #######  From each directory get the file list and get the flux file 
