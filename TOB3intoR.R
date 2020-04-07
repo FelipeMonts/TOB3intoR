@@ -55,8 +55,9 @@ TimeStart<-Sys.time()  ;
 
 #  Set Working directory
 
+# readClipboard ()
 
-setwd("C:\\Felipe\\Willow_Project\\Willow_Experiments\\Willow_Rockview\\EddyCovarianceData_Felipe\\RCode\\TOB3intoR") ; 
+setwd("C:\\Felipe\\Willow_Project\\Willow_Experiments\\Willow_Rockview\\EddyCovarianceData_Felipe\\RCode") ; 
 
 
 
@@ -173,7 +174,9 @@ setwd("C:\\Felipe\\Willow_Project\\Willow_Experiments\\Willow_Rockview\\EddyCova
 
 #TOB3.Directories<-list.dirs("C:\\Felipe\\Willow_Project\\Willow_Experiments\\Willow_Rockview\\EddyCovarianceData_Felipe\\2017\\Corn\\CornClosedPathEddyCovarianceData", recursive=T) ;
 
-TOB3.Directories<-list.dirs("C:\\Felipe\\Willow_Project\\Willow_Experiments\\Willow_Rockview\\EddyCovarianceData_Felipe\\2019\\Willow\\WillowOpenPathEddyCovarianceData", recursive=T) ;
+TOB3.Directories<-list.dirs("C:\\Felipe\\Willow_Project\\Willow_Experiments\\Willow_Rockview\\EddyCovarianceData_Felipe\\2020", recursive=T) ;
+
+# readClipboard()
 
 # C:\Felipe\Willow_Project\Willow_Experiments\Willow_Rockview\EddyCovarianceData_Felipe\2019\Willow\WillowOpenPathEddyCovarianceData\EC_OP_W_20190515
 
@@ -182,6 +185,8 @@ TOB3.Directories<-list.dirs("C:\\Felipe\\Willow_Project\\Willow_Experiments\\Wil
 #  C:\Felipe\Willow_Project\Willow_Experiments\Willow_Rockview\EddyCovarianceData_Felipe\2017\Corn\CornOpenPathEddyCovarianceData
 
 #  C:\\Felipe\\Willow_Project\\Willow_Experiments\\Willow_Rockview\\EddyCovarianceData_Felipe\\2017\\Willow\\WillowOpenPathEddyCovarianceData
+
+#
 
 FileNo<-2  ;
 
@@ -215,7 +220,7 @@ dir.create(Dir.name)
 
 #TOB3toTOA5inst<-paste0('tob32.exe -a -o ',Dir.name,"/ ", 'C:/Felipe/Willow_Project/Willow_Experiments/Willow_Rockview/EddyCovarianceData_Felipe/RCode/TOB3intoR/EC_W_OP_20170915/6464BOX.flux.dat')  ;
 
-TOB3toTOA5inst<-paste0('tob32.exe -a -o ',Dir.name,"/ ", paste(TOB3.Directories[FileNo],TOB3.file[1], sep="\\")) ;
+TOB3toTOA5inst<-paste0("C:\\Felipe\\Willow_Project\\Willow_Experiments\\Willow_Rockview\\EddyCovarianceData_Felipe\\RCode\\TOB3intoR\\tob32.exe -a -o ",Dir.name,"/ ", paste(TOB3.Directories[FileNo],TOB3.file[1], sep="\\")) ;
 
 ######  Pass the file information to Tob32.exe   ############
 
@@ -234,7 +239,10 @@ system("tob32.exe --?");
 Name.parts<-strsplit(TOB3.file,'[.]')  ;
 
 
-assign('Flux.names', read.csv( paste0(Dir.name,"/",Name.parts[[1]][1],".",Name.parts[[1]][2], ".TOA") , skip=1,header=F,nrows=1,as.is=T));
+# assign('Flux.names', read.csv( paste0(Dir.name,"/",Name.parts[[1]][1],".",Name.parts[[1]][2], ".TOA") , skip=1,header=F,nrows=1,as.is=T));
+
+assign('Flux.names', read.csv(paste0(Dir.name,"/",Name.parts[[1]][1],".",Name.parts[[1]][2], ".TOA") , skip=1,header=F,nrows=1,as.is=T));
+
 
 assign('Flux.units', read.csv( paste0(Dir.name,"/",Name.parts[[1]][1],".",Name.parts[[1]][2], ".TOA") , skip=2,header=F,nrows=1,as.is=T)); 
 
@@ -254,13 +262,13 @@ str(Flux.data)
 
 dim(Flux.data)
 
-
+View(Flux.data)
 
 Npoints<-seq((dim(Flux.data)[1]-1000),dim(Flux.data)[1]) ;
 
-Npoints_1<-seq((dim(Flux.data_1)[1]-100),dim(Flux.data_1)[1]) ;
+Npoints_1<-seq((dim(Flux.data)[1]-100),dim(Flux.data)[1]) ;
 
-Npoints_2<-seq((dim(Flux.data_2)[1]-100),dim(Flux.data_2)[1]) ;
+Npoints_2<-seq((dim(Flux.data)[1]-100),dim(Flux.data)[1]) ;
 #Npoints<-seq(1:200);
 
 
@@ -273,8 +281,9 @@ points(as.POSIXct(Flux.data$TIMESTAMP[Npoints]),Flux.data$shf_Avg.4[Npoints],typ
 
 
 
-plot(as.POSIXct(Flux.data_1$TIMESTAMP[Npoints_1]),Flux.data_1$CO2_wpl_LE[Npoints_1],type="l",col="GREEN", ylim=c(-0.5,0.5));
-points(as.POSIXct(Flux.data_1$TIMESTAMP[Npoints_1]),Flux.data_1$CO2_wpl_H[Npoints_1],type="l",col="BLUE" );
+plot(as.POSIXct(Flux.data$TIMESTAMP[Npoints_1]),Flux.data$CO2_wpl_LE[Npoints_1],type="l",col="GREEN", ylim=c(-0.5,0.5));
+
+plot(as.POSIXct(Flux.data$TIMESTAMP[Npoints_1]),Flux.data$CO2_wpl_H[Npoints_1],type="l",col="BLUE" );
 points(as.POSIXct(Flux.data_1$TIMESTAMP[Npoints_1]),Flux.data_1$CO2_wpl_H[Npoints_1]+Flux.data_1$CO2_wpl_LE[Npoints_1],type="l",col="RED"  );
 
 plot(as.POSIXct(Flux.data_2$TIMESTAMP[Npoints_2]),Flux.data_2$CO2_wpl_LE[Npoints_2],type="l",col="GREEN", ylim=c(-0.5,0.5));
